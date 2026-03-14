@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendly - Smart Attendance Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Teacher Babar</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="classes" onclick="switchView('classes')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    <span>Classes</span>
+                </button>
+                <button class="nav-item" data-view="attendance" onclick="switchView('attendance')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Attendance</span>
+                </button>
+                <button class="nav-item" data-view="reports" onclick="switchView('reports')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    <span>Reports</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item danger" onclick="confirmReset()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    <span>Reset Data</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                <div class="topbar-right">
+                    <span class="date-display" id="dateDisplay"></span>
+                    <button class="btn btn-outline btn-sm" style="margin-left: 8px;" onclick="handleLogout()">Logout</button>
+                </div>
+            </header>
+
+            <!-- Views -->
+            <div class="content-area">
+
+                <!-- Dashboard View -->
+                <section class="view active" id="view-dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card gradient-purple">
+                            <div class="stat-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalClasses">0</span>
+                                <span class="stat-label">Total Classes</span>
+                            </div>
+                        </div>
+                        <div class="stat-card gradient-blue">
+                            <div class="stat-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalStudents">0</span>
+                                <span class="stat-label">Total Students</span>
+                            </div>
+                        </div>
+                        <div class="stat-card gradient-green">
+                            <div class="stat-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalSessions">0</span>
+                                <span class="stat-label">Sessions Taken</span>
+                            </div>
+                        </div>
+                        <div class="stat-card gradient-orange">
+                            <div class="stat-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="avgAttendance">0%</span>
+                                <span class="stat-label">Avg Attendance</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Recent Sessions</h3>
+                            </div>
+                            <div class="card-body" id="recentSessions">
+                                <div class="empty-state">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <p>No sessions yet. Take attendance to get started!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Attendance Overview</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" id="overviewChart">
+                                    <div class="empty-state">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                        <p>Charts will appear after recording attendance.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Classes View -->
+                <section class="view" id="view-classes">
+                    <div class="view-header">
+                        <h2>Manage Classes</h2>
+                        <button class="btn btn-primary" onclick="openModal('classModal')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Add Class
+                        </button>
+                    </div>
+                    <div class="classes-grid" id="classesGrid">
+                        <div class="empty-state-large">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            <h3>No classes yet</h3>
+                            <p>Create your first class to start tracking attendance.</p>
+                            <button class="btn btn-primary" onclick="openModal('classModal')">Create Class</button>
+                        </div>
+                    </div>
+                    <div id="studentListPanel" class="student-list-panel hidden"></div>
+                </section>
+
+                <!-- Attendance View -->
+                <section class="view" id="view-attendance">
+                    <div class="view-header">
+                        <h2>Take Attendance</h2>
+                    </div>
+                    <div class="attendance-container">
+                        <div class="class-selector">
+                            <label>Select Class</label>
+                            <select id="attendanceClassSelect" onchange="loadAttendanceView()">
+                                <option value="">-- Choose a class --</option>
+                            </select>
+                        </div>
+                        <div id="attendanceContent" class="attendance-content">
+                            <div class="empty-state-large">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                <h3>Select a class</h3>
+                                <p>Choose a class above to take attendance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports View -->
+                <section class="view" id="view-reports">
+                    <div class="view-header">
+                        <h2>Reports</h2>
+                    </div>
+                    <div class="reports-container">
+                        <div class="class-selector">
+                            <label>Select Class</label>
+                            <select id="reportsClassSelect" onchange="loadReportsView()">
+                                <option value="">-- Choose a class --</option>
+                            </select>
+                        </div>
+                        <div id="reportsContent">
+                            <div class="empty-state-large">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                <h3>Select a class</h3>
+                                <p>Choose a class to view attendance reports.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Class Modal -->
+    <div class="modal-overlay" id="classModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="classModalTitle">Add New Class</h3>
+                <button class="modal-close" onclick="closeModal('classModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editClassId">
+                <div class="form-group">
+                    <label for="className">Class Name</label>
+                    <input type="text" id="className" placeholder="e.g. Data Structures & Algorithms">
+                </div>
+                <div class="form-group">
+                    <label for="classCode">Class Code</label>
+                    <input type="text" id="classCode" placeholder="e.g. CS201">
+                </div>
+                <div class="form-group">
+                    <label for="classColor">Color Theme</label>
+                    <div class="color-picker">
+                        <button class="color-swatch active" data-color="#6C5CE7" style="background:#6C5CE7" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#0984E3" style="background:#0984E3" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#00B894" style="background:#00B894" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#E17055" style="background:#E17055" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#FDCB6E" style="background:#FDCB6E" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#E84393" style="background:#E84393" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#00CEC9" style="background:#00CEC9" onclick="selectColor(this)"></button>
+                        <button class="color-swatch" data-color="#A29BFE" style="background:#A29BFE" onclick="selectColor(this)"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('classModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveClass()">Save Class</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="studentModalTitle">Add Student</h3>
+                <button class="modal-close" onclick="closeModal('studentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="studentClassId">
+                <input type="hidden" id="editStudentId">
+                <div class="form-group">
+                    <label for="studentName">Student Name</label>
+                    <input type="text" id="studentName" placeholder="e.g. John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="studentRoll">Roll Number / ID</label>
+                    <input type="text" id="studentRoll" placeholder="e.g. 2023-CS-101">
+                </div>
+                <div class="form-group">
+                    <label for="bulkStudentData">Bulk Student Data</label>
+                    <textarea id="bulkStudentData" placeholder="Line format: Name, ID or unified: A,1,B,2,C,3"></textarea>
+                    <small>Paste one student per line: <br>Anna Smith, 2026-CS-001<br>John Doe, 2026-CS-002<br>or single line: Alice,1001,Bob,1002</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveStudent()">Add Student</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3>Login / Register</h3>
+            </div>
+            <div class="modal-body">
+                <form id="authForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="text" id="loginEmail" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <div class="modal-footer" style="justify-content: space-between;">
+                        <button type="button" class="btn btn-secondary" id="registerBtn">Register</button>
+                        <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirm</h3>
+                <button class="modal-close" onclick="closeModal('confirmModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('confirmModal')">Cancel</button>
+                <button class="btn btn-danger" id="confirmAction">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
